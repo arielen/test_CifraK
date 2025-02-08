@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=61.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "backend"
+description = "A web application for news and geos"
+keywords = ["web", "app"]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.1",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Internet :: WWW/HTTP :: WSGI",
+    "Topic :: Utilities"
+]
+requires-python = ">=3.13"
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = ["E", "F", "W", "C90"]
+# ignore = ["E203", "W503"]
+exclude = [
+  ".git",
+  "__pycache__",
+  ".tox",
+  ".venv",
+  "migrations"
+]
+
+[tool.coverage.run]
+source = ["backend"]
+parallel = true
+concurrency = ["thread", "multiprocessing"]
+omit = [
+    "*.tox/*",
+    "*tests.py",
+    "*__init__.py",
+    "*__main__.py",
+    "*/admin.py",
+    "*/apps.py",
+    "*/backend/config/asgi.py",
+    "*/backend/config/wsgi.py",
+    "*/backend/config/celery.py",
+    "*/backend/config/settings.py",
+    "*/backend/manage.py",
+]
+
+[tool.coverage.report]
+fail_under = 95
+show_missing = true
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == '__main__':",
+  "if settings.DEBUG",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE= "config.test_settings"
+python_files = [
+  "tests.py",
+  "test_*.py",
+  "*_tests.py"
+]
