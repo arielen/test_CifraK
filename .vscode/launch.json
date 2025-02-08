@@ -1,0 +1,58 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // Launch the Django development server
+            "name": "Backend Server",
+            "consoleName": "Backend Server",
+            "type": "debugpy",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/backend",
+            "program": "${workspaceFolder}/backend/manage.py",
+            "args": [
+                "runserver",
+                "localhost:8000"
+            ],
+            "justMyCode": false,
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            // Launch the Celery worker and beat
+            "name": "Celery Worker & Beat",
+            "consoleName": "Celery Worker",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "cwd": "${workspaceFolder}/backend",
+            "args": [
+                "-A",
+                "config",
+                "worker",
+                "-B",
+                "-l",
+                "info"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            // Launch the Celery Flower dashboard
+            // standartly open http://localhost:5555
+            "name": "Celery Flower",
+            "consoleName": "Celery Flower",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "cwd": "${workspaceFolder}/backend",
+            "args": [
+                "-A",
+                "config",
+                "flower",
+                "--port=5555"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+    ]
+}

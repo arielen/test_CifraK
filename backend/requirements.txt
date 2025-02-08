@@ -10,3 +10,4 @@ Pillow
 openpyxl
 xlsxwriter
 aiohttp
+flower

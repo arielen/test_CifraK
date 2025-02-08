@@ -21,6 +21,12 @@ env = environ.Env(
     DB_PORT=(int, 5432),
     DATABASE_URL=(str, "postgres://postgres:password@localhost/db_geonews"),
     CELERY_BROKER_URL=(str, "redis://localhost:6379/0"),
+    EMAIL_BACKEND=(str, "django.core.mail.backends.smtp.EmailBackend"),
+    EMAIL_HOST=(str, "localhost"),
+    EMAIL_PORT=(int, 2525),
+    EMAIL_USE_TLS=(bool, False),
+    EMAIL_HOST_USER=(str, "admin@localhost.com"),
+    EMAIL_HOST_PASSWORD=(str, "password"),
 )
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
@@ -101,18 +107,18 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # EMAIL
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "localhost"
-EMAIL_PORT = 2525
-EMAIL_USE_TLS = False
-EMAIL_HOST_USER = "admin@localhost.com"
-EMAIL_HOST_PASSWORD = "password"
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = "GeoNews & Spots <admin@localhost.com>"
 
 
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Krasnoyarsk"
 USE_I18N = True
 USE_TZ = True
 
