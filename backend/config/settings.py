@@ -3,6 +3,8 @@ from pathlib import Path
 
 import environ
 
+from .schedules import EmailCrontabSchedule
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, True),
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     "django_summernote",
     "constance",
     "constance.backends.database",
+    "news",
 ]
 
 MIDDLEWARE = [
@@ -156,3 +159,9 @@ CONSTANCE_CONFIG = {
 
 # Celery
 CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_BEAT_SCHEDULE = {
+    "send-daily-news-email": {
+        "task": "news.tasks.send_news_email",
+        "schedule": EmailCrontabSchedule(),
+    },
+}

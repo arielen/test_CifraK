@@ -6,3 +6,4 @@ celery
 django-summernote
 django-constance[redis]
 psycopg2
+Pillow
