@@ -23,6 +23,7 @@ urlpatterns = [
         name="redoc",
     ),
     path("api/", include("news.urls")),
+    path("api/", include("places.urls")),
 ]
 
 if settings.DEBUG:

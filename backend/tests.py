@@ -1,9 +1,9 @@
 import importlib
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
-from config.schedules import EmailCrontabSchedule
+from config.schedules import EmailCrontabSchedule, WeatherIntervalSchedule
 from constance import config
 from django.contrib.auth import get_user_model
 
@@ -90,3 +90,39 @@ class TestEmailCrontabSchedule:
         schedule.is_due(datetime.now())
         assert schedule.hour == {8}
         assert schedule.minute == {0}
+
+
+class TestWeatherIntervalSchedule:
+    @pytest.mark.django_db
+    def test_valid_interval(self, monkeypatch):
+        """
+        Если в конфигурации указан корректный интервал WEATHER_FETCH_INTERVAL,
+        WeatherIntervalSchedule должен обновить run_every соответственно.
+        """
+        monkeypatch.setattr(config, "WEATHER_FETCH_INTERVAL", "2:30")
+        schedule = WeatherIntervalSchedule()
+        schedule.update_interval()
+        assert schedule.run_every == timedelta(hours=2, minutes=30)
+
+    @pytest.mark.django_db
+    def test_invalid_interval(self, monkeypatch):
+        """
+        Если в конфигурации указан некорректный интервал WEATHER_FETCH_INTERVAL,
+        WeatherIntervalSchedule должен использовать значение по умолчанию (1 час).
+        """
+        monkeypatch.setattr(config, "WEATHER_FETCH_INTERVAL", "invalid")
+        schedule = WeatherIntervalSchedule()
+        schedule.update_interval()
+        assert schedule.run_every == timedelta(hours=1)
+
+    @pytest.mark.django_db
+    def test_is_due_updates_interval(self, monkeypatch):
+        """
+        При вызове is_due WeatherIntervalSchedule должен обновить run_every
+        согласно конфигурации, а затем делегировать проверку родительскому классу.
+        """
+        monkeypatch.setattr(config, "WEATHER_FETCH_INTERVAL", "1:00")
+        schedule = WeatherIntervalSchedule()
+        last_run = datetime.now() - timedelta(hours=1, minutes=1)
+        schedule.is_due(last_run)
+        assert schedule.run_every == timedelta(hours=1)

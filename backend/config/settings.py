@@ -3,7 +3,7 @@ from pathlib import Path
 
 import environ
 
-from .schedules import EmailCrontabSchedule
+from .schedules import EmailCrontabSchedule, WeatherIntervalSchedule
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "constance",
     "constance.backends.database",
     "news",
+    "places",
 ]
 
 MIDDLEWARE = [
@@ -163,5 +164,9 @@ CELERY_BEAT_SCHEDULE = {
     "send-daily-news-email": {
         "task": "news.tasks.send_news_email",
         "schedule": EmailCrontabSchedule(),
+    },
+    "fetch-weather-summary": {
+        "task": "places.tasks.fetch_weather_summary",
+        "schedule": WeatherIntervalSchedule(),
     },
 }

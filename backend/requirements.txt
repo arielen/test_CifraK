@@ -7,3 +7,6 @@ django-summernote
 django-constance[redis]
 psycopg2
 Pillow
+openpyxl
+xlsxwriter
+aiohttp
